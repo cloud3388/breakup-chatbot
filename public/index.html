@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breakup Chatbot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff2f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .chat-container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+    }
+    .left-content {
+      flex: 1;
+    }
+    .left-content h1 {
+      font-size: 32px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+    .left-content p {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+    .chat-bubble {
+      background: #f0ecff;
+      padding: 16px 24px;
+      border-radius: 16px;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .input-box {
+      display: flex;
+      border: 2px solid #ddd;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    button {
+      background: #4265ff;
+      color: white;
+      padding: 0 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .right-image {
+      flex: 1;
+    }
+    .right-image img {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+    @media (max-width: 768px) {
+      .chat-container {
+        flex-direction: column;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="left-content">
+      <h1>Chat with AI</h1>
+      <p>Welcome! Feel free to ask for support or guidance as you heal from a breakup.</p>
+      <div class="chat-bubble" id="ai-response">AI: I’m here to help. What’s on your mind?</div>
+      <div class="input-box">
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+    <div class="right-image">
+      <img src="girl-sad-illustration.jpg" alt="Emotional girl" />
+    </div>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const bubble = document.getElementById('ai-response');
+      bubble.innerHTML = "AI: typing...";
+
+      const res = await fetch('/chat', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+      bubble.innerHTML = "AI: " + (data.reply || "Sorry, I couldn’t reply.");
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
